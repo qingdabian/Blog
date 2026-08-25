@@ -1,26 +1,170 @@
 @import "tailwindcss";
 
+/* 暗色模式：class 策略（.dark 由 ThemeToggle 控制） */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2328;
+  --card: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.05);
+  --muted: #71717a;
+  --boa-bg-opacity: 0.28;
+  --boa-bg-brightness: 1;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #e4e4e7;
+  --card: #0c0c0e;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --muted: #9f9fa8;
+  --boa-bg-opacity: 0.32;
+  --boa-bg-brightness: 0.5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  /* 主题色：纯黑白灰（无彩色） */
+  --color-brand: #18181b;
+  --color-brand-deep: #3f3f46;
+  --font-sans: var(--font-noto-sans-sc), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background);
+}
+
+/* 背景内嵌大图：固定铺满，内容浮于其上 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/images/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: var(--boa-bg-opacity);
+  filter: brightness(var(--boa-bg-brightness));
+  pointer-events: none;
+}
+
+/* ---------- MDX 正文排版 ---------- */
+.prose {
+  line-height: 1.9;
+  color: var(--foreground);
+  opacity: 0.88;
+  overflow-wrap: break-word;
+}
+.prose > * + * {
+  margin-top: 1em;
+}
+.prose h2 {
+  margin-top: 2em;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+.prose h3 {
+  margin-top: 1.6em;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.prose a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(24, 24, 27, 0.35);
+}
+.dark .prose a {
+  color: #d4d4d8;
+  text-decoration-color: rgba(212, 212, 216, 0.4);
+}
+.prose a:hover {
+  text-decoration-color: var(--color-brand);
+}
+.prose ul {
+  padding-left: 1.4em;
+  list-style: disc;
+}
+.prose ol {
+  padding-left: 1.4em;
+  list-style: decimal;
+}
+.prose li {
+  margin-top: 0.35em;
+}
+.prose blockquote {
+  margin: 1.5em 0;
+  padding: 0.75em 1.25em;
+  border-left: 4px solid #a1a1aa;
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--muted);
+}
+.dark .prose blockquote {
+  background: rgba(255, 255, 255, 0.07);
+  border-left-color: #71717a;
+}
+.prose code:not(pre code) {
+  padding: 0.15em 0.45em;
+  border-radius: 0.4em;
+  background: rgba(0, 0, 0, 0.08);
+  color: #18181b;
+  font-size: 0.9em;
+}
+.dark .prose code:not(pre code) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e4e4e7;
+}
+.prose pre {
+  margin: 1.5em 0;
+  padding: 1.1em 1.3em;
+  border-radius: 0.9rem;
+  background: #0d1117;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.prose pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+.prose img {
+  margin: 1.5em auto;
+  border-radius: 0.9rem;
+  max-width: 100%;
+}
+.prose table {
+  margin: 1.5em 0;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+.prose th {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--foreground);
+  font-weight: 600;
+}
+.prose th,
+.prose td {
+  padding: 0.6em 0.9em;
+  border: 1px solid var(--card-border);
+  text-align: left;
+}
+.prose hr {
+  margin: 2em 0;
+  border: none;
+  border-top: 2px dashed var(--card-border);
+}
+.prose strong {
+  color: var(--foreground);
 }

@@ -1,0 +1,4 @@
+{$DOMAIN} {
+    encode gzip
+    reverse_proxy blog:3000
+}

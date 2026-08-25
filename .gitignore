@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +40,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# build & deploy temp files
+/build-font.log
+/build.log
+/deploy.tar
+/content.tar
+/.deploy-staging/
+/.server-*.css
+/.server-*.tsx
+
+# local screenshots
+home_article_cards.png
+home_cards_section.png
+notes_list.png

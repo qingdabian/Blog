@@ -1,0 +1,65 @@
+---
+title: 用 Docker 把 Next.js 部署到 Ubuntu 服务器
+date: 2026-08-18
+description: '基于 output: standalone 的多阶段构建，配合 Caddy 自动签发 HTTPS 证书的完整部署方案。'
+tags:
+  - Next.js
+  - Docker
+  - 部署
+cover: sky
+coverImage: /images/covers/nextjs-docker.svg
+emoji: 🐳
+---
+
+本文介绍如何把一个 Next.js 应用以 Docker 容器的方式部署到 Ubuntu 服务器，并用 Caddy 完成反向代理与 HTTPS 证书自动签发。
+
+## 1. 开启 standalone 输出
+
+在 `next.config.ts` 中开启：
+
+```ts
+const nextConfig: NextConfig = {
+  output: "standalone",
+};
+```
+
+构建后 `.next/standalone` 目录会包含运行所需的最小产物，镜像体积显著缩小。
+
+## 2. 多阶段构建
+
+```dockerfile
+FROM node:24-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:24-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+CMD ["node", "server.js"]
+```
+
+## 3. 反向代理与 HTTPS
+
+Caddy 最大的优势是 **证书自动签发**，只需要一个域名：
+
+```caddyfile
+blog.example.com {
+    encode gzip
+    reverse_proxy blog:3000
+}
+```
+
+## 部署流程速查
+
+| 步骤 | 命令 | 说明 |
+| --- | --- | --- |
+| 拉取代码 | `git pull` | 服务器上更新仓库 |
+| 构建启动 | `docker compose up -d --build` | 重新构建并后台运行 |
+| 查看日志 | `docker compose logs -f` | 排查问题 |
+
+整套流程跑通后，发布一篇文章只需 push 到仓库再到服务器执行两条命令。

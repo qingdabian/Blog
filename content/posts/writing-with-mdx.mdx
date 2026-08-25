@@ -1,0 +1,66 @@
+---
+title: 使用 MDX 写作：语法速览
+date: 2026-08-10
+description: 快速上手 MDX 写作，涵盖标题、代码高亮、表格、引用等常用语法，以及 front-matter 元数据规范。
+tags:
+  - 写作
+  - Markdown
+cover: emerald
+coverImage: /images/covers/writing-with-mdx.svg
+emoji: ✍️
+---
+
+MDX 在 Markdown 基础上扩展了 JSX 能力，同时完整保留 Markdown 语法。本博客的文章全部使用 MDX 编写。
+
+## front-matter 元数据
+
+每篇文章开头用 `---` 包裹的 YAML 声明元数据：
+
+```yaml
+---
+title: 文章标题
+date: 2026-08-10
+description: 一句话摘要
+tags:
+  - 写作
+  - Markdown
+cover: emerald   # 卡片渐变主题：violet / sky / emerald / amber / rose / slate
+emoji: ✍️        # 卡片封面图标
+---
+```
+
+其中 `cover` 决定首页卡片的渐变色，可选值：
+
+| 取值 | 渐变 |
+| --- | --- |
+| `violet` | 紫 → 紫红 |
+| `sky` | 天蓝 → 靛蓝 |
+| `emerald` | 翠绿 → 青 |
+| `amber` | 琥珀 → 红 |
+| `rose` | 玫红 → 紫红 |
+
+## 常用语法
+
+**代码高亮**由 rehype-highlight 提供：
+
+```ts
+export function sum(a: number, b: number): number {
+  return a + b;
+}
+```
+
+> 引用适合强调观点：好的排版让阅读成为享受。
+
+- 无序列表支持嵌套
+- `行内代码` 与 [链接](/about) 同样可用
+- GFM 表格、任务列表均已开启
+
+## 图片
+
+MDX 中可以直接引用 `public` 目录下的静态资源：
+
+```mdx
+![示例图片](/images/demo.png)
+```
+
+掌握这些语法，即可顺畅写作。更多内容见 [MDX 官方文档](https://mdxjs.com)。
