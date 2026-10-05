@@ -1,6 +1,6 @@
 # Griffin Blog
 
-基于 Next.js + TypeScript + Tailwind CSS 的个人博客，乔巴粉 × 女帝紫红主题。
+基于 Next.js + TypeScript + Tailwind CSS 的个人博客。
 
 ## 特性
 
